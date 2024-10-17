@@ -4,15 +4,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import org.wit.musician_00.databinding.ActivityClipBinding
+import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
-import timber.log.Timber
 import timber.log.Timber.i
 
 class ClipActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityClipBinding
     var clip = ClipModel()
-    val clips = ArrayList<ClipModel>()
+    lateinit var app : MainApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +20,7 @@ class ClipActivity : AppCompatActivity() {
         binding = ActivityClipBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Timber.plant(Timber.DebugTree())
+        app = application as MainApp
         i("Clip Activity started..")
 
         binding.btnAdd.setOnClickListener() {
@@ -28,11 +28,10 @@ class ClipActivity : AppCompatActivity() {
             clip.description = binding.clipDescription.text.toString()
             if (clip.title.isNotEmpty()) {
                 i("add Button Pressed")
-                clips.add(clip.copy())
+                app.clips.add(clip.copy())
 
-                for (index in clips.indices){
-                    i("$index: ${clips[index].title}, ${clips[index].description}")
-                }
+                for (i in app.clips.indices)
+                { i("Clip[$i]:${this.app.clips[i]}") }
             }
             else {
                 Snackbar
