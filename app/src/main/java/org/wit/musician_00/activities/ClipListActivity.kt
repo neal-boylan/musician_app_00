@@ -10,10 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.wit.musician_00.R
 import org.wit.musician_00.adapters.ClipAdapter
+import org.wit.musician_00.adapters.ClipListener
 import org.wit.musician_00.databinding.ActivityClipListBinding
 import org.wit.musician_00.main.MainApp
+import org.wit.musician_00.models.ClipModel
 
-class ClipListActivity : AppCompatActivity() {
+class ClipListActivity : AppCompatActivity(), ClipListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityClipListBinding
@@ -29,7 +31,7 @@ class ClipListActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = ClipAdapter(app.clips)
+        binding.recyclerView.adapter = ClipAdapter(app.clips.findAll(), this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -50,7 +52,20 @@ class ClipListActivity : AppCompatActivity() {
     private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
         {
             if (it.resultCode == Activity.RESULT_OK) {
-                (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.clips.size)
+                (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.clips.findAll().size)
+            }
+        }
+
+    override fun onClipClick(clip: ClipModel) {
+        val launcherIntent = Intent(this, ClipActivity::class.java)
+        launcherIntent.putExtra("clip_edit", clip)
+        getClickResult.launch(launcherIntent)
+    }
+
+    private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        {
+            if (it.resultCode == Activity.RESULT_OK) {
+                (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.clips.findAll().size)
             }
         }
 }
