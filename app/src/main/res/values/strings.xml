@@ -3,4 +3,6 @@
     <string name="button_addClip">Add Clip</string>
     <string name="hint_clipTitle">Clip Title</string>
     <string name="hint_clipDescription">Clip Description</string>
+    <string name="menu_addClip">Add</string>
+    <string name="menu_cancel">Add</string>
 </resources>
