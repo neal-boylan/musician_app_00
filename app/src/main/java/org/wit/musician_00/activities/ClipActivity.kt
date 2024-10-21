@@ -41,10 +41,9 @@ class ClipActivity : AppCompatActivity() {
 
         app = application as MainApp
         i("Clip Activity started..")
-        i("This clip: $clip")
         mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
 
-        i("clip.audio: ${clip.audio}")
+        i("clip.title: ${clip.title}")
 
         binding.stopBtn.setOnClickListener{
             if (mediaPlayer.isPlaying) {
@@ -65,6 +64,7 @@ class ClipActivity : AppCompatActivity() {
         if (intent.hasExtra("clip_edit")) {
             edit = true
             clip = intent.extras?.getParcelable("clip_edit")!!
+            i("This clip: $clip")
             binding.clipTitle.setText(clip.title)
             binding.clipDescription.setText(clip.description)
             binding.btnAdd.text = getString(R.string.button_saveClip)

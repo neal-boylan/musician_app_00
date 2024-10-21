@@ -15,8 +15,8 @@ class MainApp : Application() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         i("Musician started")
-        clips.create(ClipModel(0, "One", "About one..."))
-        clips.create(ClipModel(1, "Two", "About two..."))
-        clips.create(ClipModel(2, "Three", "About three..."))
+        clips.create(ClipModel(title = "One", description = "About one..."))
+        clips.create(ClipModel(title = "Two", description = "About two..."))
+        clips.create(ClipModel(title = "Three", description = "About three..."))
     }
 }
