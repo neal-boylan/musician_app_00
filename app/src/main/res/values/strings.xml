@@ -7,8 +7,11 @@
     <string name="menu_addClip">Add</string>
     <string name="menu_cancel">Cancel</string>
     <string name="button_addImage">Add Image</string>
+    <string name="button_addAudio">Add Audio</string>
     <string name="button_changeImage">Change Image</string>
+    <string name="button_changeAudio">Change Audio</string>
     <string name="select_clip_image">Select Clip image</string>
+    <string name="select_clip_audio">Select Clip audio</string>
     <string name="button_location">Set Location</string>
     <string name="title_activity_map">MapActivity</string>
 </resources>

@@ -27,6 +27,7 @@ class ClipMemStore : ClipStore {
             foundClip.title = clip.title
             foundClip.description = clip.description
             foundClip.image = clip.image
+            foundClip.audio = clip.audio
             foundClip.location = clip.location
             logAll()
         }
