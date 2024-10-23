@@ -1,14 +1,21 @@
 package org.wit.musician_00.activities
 
+import android.R.id.button1
 import android.content.Intent
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.Util
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import org.wit.musician_00.R
@@ -20,6 +27,7 @@ import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.Location
 import timber.log.Timber.i
 
+
 class ClipActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityClipBinding
@@ -27,6 +35,8 @@ class ClipActivity : AppCompatActivity() {
     private lateinit var audioIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mediaPlayer: MediaPlayer
+
+
     var clip = ClipModel()
     lateinit var app : MainApp
     var location = Location(52.245696, -7.139102, 5f)
@@ -43,24 +53,6 @@ class ClipActivity : AppCompatActivity() {
         i("Clip Activity started..")
         mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
 
-        i("clip.title: ${clip.title}")
-
-        binding.stopBtn.setOnClickListener{
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.stop()
-
-                mediaPlayer.prepare()
-            }
-        }
-        binding.playBtn.setOnClickListener{
-            mediaPlayer.start()
-        }
-        binding.pauseBtn.setOnClickListener{
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
-            }
-        }
-
         if (intent.hasExtra("clip_edit")) {
             edit = true
             clip = intent.extras?.getParcelable("clip_edit")!!
@@ -75,17 +67,36 @@ class ClipActivity : AppCompatActivity() {
             location = clip.location
         }
 
-        binding.chooseImage.setOnClickListener {
-            showImagePicker(imageIntentLauncher)
-        }
+        i("clip: ${clip}")
+        mediaPlayer.setDataSource(this, clip.audio)
 
         binding.chooseAudio.setOnClickListener {
             showAudioPicker(audioIntentLauncher)
         }
 
-        registerImagePickerCallback()
-        registerMapCallback()
-        registerAudioPickerCallback()
+        binding.stopBtn.setOnClickListener{
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.stop()
+                mediaPlayer.prepare()
+            }
+        }
+        binding.playBtn.setOnClickListener{
+            mediaPlayer.start()
+        }
+        binding.pauseBtn.setOnClickListener{
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+            }
+        }
+
+        binding.chooseImage.setOnClickListener {
+            showImagePicker(imageIntentLauncher)
+        }
+
+        binding.clipLocation.setOnClickListener {
+            val launcherIntent = Intent(this, MapActivity::class.java).putExtra("location", clip.location)
+            mapIntentLauncher.launch(launcherIntent)
+        }
 
         binding.btnAdd.setOnClickListener() {
             clip.title = binding.clipTitle.text.toString()
@@ -104,10 +115,9 @@ class ClipActivity : AppCompatActivity() {
             }
         }
 
-        binding.clipLocation.setOnClickListener {
-            val launcherIntent = Intent(this, MapActivity::class.java).putExtra("location", clip.location)
-            mapIntentLauncher.launch(launcherIntent)
-        }
+        registerImagePickerCallback()
+        registerMapCallback()
+        registerAudioPickerCallback()
 
     }
 
@@ -158,9 +168,8 @@ class ClipActivity : AppCompatActivity() {
                         if (result.data != null) {
                             i("Got Result ${result.data!!.data}")
                             clip.audio = result.data!!.data!!
-                            // Picasso.get().load(clip.image).into(binding.clipImage)
                             binding.chooseAudio.setText(R.string.button_changeAudio)
-                        } // end of if
+                        }
                     }
                     RESULT_CANCELED -> { }
                     else -> { }

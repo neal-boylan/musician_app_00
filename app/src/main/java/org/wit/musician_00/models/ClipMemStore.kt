@@ -2,7 +2,7 @@ package org.wit.musician_00.models
 
 import timber.log.Timber.i
 
-var lastId = 2L
+var lastId = 0L
 
 internal fun getId(): Long {
     return lastId++
