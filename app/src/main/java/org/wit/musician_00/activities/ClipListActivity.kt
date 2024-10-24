@@ -16,6 +16,7 @@ import org.wit.musician_00.databinding.ActivityClipListBinding
 import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.UserModel
+import timber.log.Timber.i
 
 class ClipListActivity : AppCompatActivity(), ClipListener {
 
@@ -32,6 +33,9 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
         setSupportActionBar(binding.toolbar)
 
         app = application as MainApp
+
+        user = intent.extras?.getParcelable("user_details")!!
+        i("This user: $user")
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager

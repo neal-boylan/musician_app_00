@@ -33,16 +33,42 @@ class LoginActivity : AppCompatActivity() {
         app = application as MainApp
 
         binding.loginButton.setOnClickListener(View.OnClickListener {
-            if (binding.username.text.toString() == "user" && binding.password.text.toString() == "1234"){
-                Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
-                user.email = binding.username.text.toString()
-                user.password = binding.password.text.toString()
-                app.users.create(user.copy())
-                setResult(RESULT_OK)
-                val launcherIntent = Intent(this, ClipListActivity::class.java)
-                startActivity(launcherIntent)
+            if (binding.username.text.toString() != "" && binding.password.text.toString() != "") {
+                if (app.users.findByEmail(binding.username.text.toString())?.email != "") {
+                    if (app.users.findByEmail(binding.username.text.toString())?.password == binding.password.text.toString()) {
+                        Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
+                        user.email = binding.username.text.toString()
+                        user.password = binding.password.text.toString()
+                        app.users.create(user.copy())
+                        setResult(RESULT_OK)
+                        val launcherIntent =
+                            Intent(this, ClipListActivity::class.java).putExtra(
+                                "user_details",
+                                user
+                            )
+                        startActivity(launcherIntent)
+                    } else {
+                        Toast.makeText(this, "Login Failed!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
+
+        binding.registerButton.setOnClickListener(View.OnClickListener {
+            if (binding.username.text.toString() != "" && binding.password.text.toString() != ""){
+                if (app.users.findByEmail(binding.username.text.toString())?.email.isNullOrEmpty()) {
+                    Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                    user.email = binding.username.text.toString()
+                    user.password = binding.password.text.toString()
+                    app.users.create(user.copy())
+                    setResult(RESULT_OK)
+                    val launcherIntent = Intent(this, LoginActivity::class.java)
+                    startActivity(launcherIntent)
+                } else {
+                    Toast.makeText(this, "Account already exists!", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(this, "Login Failed!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Registration Failed!", Toast.LENGTH_SHORT).show()
             }
         })
 
