@@ -15,16 +15,17 @@ import org.wit.musician_00.adapters.ClipListener
 import org.wit.musician_00.databinding.ActivityClipListBinding
 import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
+import org.wit.musician_00.models.UserModel
 
 class ClipListActivity : AppCompatActivity(), ClipListener {
 
+    var user = UserModel()
     lateinit var app: MainApp
     private lateinit var binding: ActivityClipListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Thread.sleep(3000)
-        installSplashScreen()
+
         binding = ActivityClipListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.toolbar.title = title
@@ -46,6 +47,10 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
         when (item.itemId) {
             R.id.item_add -> {
                 val launcherIntent = Intent(this, ClipActivity::class.java)
+                getResult.launch(launcherIntent)
+            }
+            R.id.item_logout -> {
+                val launcherIntent = Intent(this, LoginActivity::class.java)
                 getResult.launch(launcherIntent)
             }
         }

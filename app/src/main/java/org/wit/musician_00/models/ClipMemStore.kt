@@ -1,5 +1,6 @@
 package org.wit.musician_00.models
 
+import androidx.media3.extractor.text.webvtt.WebvttCssStyle.FontSizeUnit
 import timber.log.Timber.i
 
 var lastId = 0L
@@ -26,6 +27,9 @@ class ClipMemStore : ClipStore {
         if (foundClip != null) {
             foundClip.title = clip.title
             foundClip.description = clip.description
+            foundClip.yearsOfExperience = clip.yearsOfExperience
+            foundClip.instrument = clip.instrument
+            foundClip.influences = clip.influences
             foundClip.image = clip.image
             foundClip.audio = clip.audio
             foundClip.location = clip.location

@@ -9,6 +9,9 @@ data class ClipModel(
     var id: Long = 2,
     var title: String = "",
     var description: String = "",
+    var instrument: String = "",
+    var yearsOfExperience: Number = 0,
+    var influences: Array<String> = emptyArray<String>(),
     var image: Uri = Uri.EMPTY,
     var audio: Uri = Uri.EMPTY,
     var location: Location = Location(52.245696, -7.139102, 5f)) : Parcelable

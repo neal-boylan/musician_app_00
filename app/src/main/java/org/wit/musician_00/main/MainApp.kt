@@ -3,6 +3,7 @@ package org.wit.musician_00.main
 import android.app.Application
 import org.wit.musician_00.models.ClipMemStore
 import org.wit.musician_00.models.ClipModel
+import org.wit.musician_00.models.UserMemStore
 import timber.log.Timber
 import timber.log.Timber.i
 
@@ -10,6 +11,7 @@ class MainApp : Application() {
 
     // val clips = ArrayList<ClipModel>()
     val clips = ClipMemStore()
+    val users = UserMemStore()
 
     override fun onCreate() {
         super.onCreate()

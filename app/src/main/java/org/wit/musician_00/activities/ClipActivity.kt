@@ -33,7 +33,6 @@ class ClipActivity : AppCompatActivity() {
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mediaPlayer: MediaPlayer
 
-
     var clip = ClipModel()
     lateinit var app : MainApp
     var location = Location(52.245696, -7.139102, 5f)
@@ -43,8 +42,6 @@ class ClipActivity : AppCompatActivity() {
         var edit = false
         binding = ActivityClipBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.toolbarAdd.title = title
-        setSupportActionBar(binding.toolbarAdd)
 
         app = application as MainApp
         i("Clip Activity started..")
@@ -58,6 +55,7 @@ class ClipActivity : AppCompatActivity() {
             binding.clipTitle.setText(clip.title)
             binding.clipDescription.setText(clip.description)
             binding.btnAdd.text = getString(R.string.button_saveClip)
+            binding.toolbarAdd.title = clip.title
             Picasso.get().load(clip.image).into(binding.clipImage)
             if (clip.image != Uri.EMPTY) {
                 binding.chooseImage.text = getString(R.string.button_changeImage)
@@ -66,8 +64,12 @@ class ClipActivity : AppCompatActivity() {
                 binding.chooseAudio.text = "Change Audio"
             }
             location = clip.location
+        } else {
+            binding.toolbarAdd.title = "Add New Clip"
         }
 
+
+        setSupportActionBar(binding.toolbarAdd)
         i("clip: ${clip}")
 
         binding.chooseAudio.setOnClickListener {
