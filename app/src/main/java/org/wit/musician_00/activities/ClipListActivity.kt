@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.wit.musician_00.R
 import org.wit.musician_00.adapters.ClipAdapter
@@ -22,6 +23,8 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Thread.sleep(3000)
+        installSplashScreen()
         binding = ActivityClipListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.toolbar.title = title

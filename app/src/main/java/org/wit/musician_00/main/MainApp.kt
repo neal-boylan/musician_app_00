@@ -13,6 +13,7 @@ class MainApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         Timber.plant(Timber.DebugTree())
         i("Musician started")
         clips.create(ClipModel(title = "One", description = "About one..."))

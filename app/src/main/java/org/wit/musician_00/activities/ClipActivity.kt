@@ -1,21 +1,17 @@
 package org.wit.musician_00.activities
 
-import android.R.id.button1
 import android.content.Intent
+import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.media3.common.MediaItem
-import androidx.media3.common.util.Util
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.PlayerView
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import org.wit.musician_00.R
@@ -26,6 +22,7 @@ import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.Location
 import timber.log.Timber.i
+import java.io.IOException
 
 
 class ClipActivity : AppCompatActivity() {
@@ -53,6 +50,7 @@ class ClipActivity : AppCompatActivity() {
         i("Clip Activity started..")
         mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
 
+
         if (intent.hasExtra("clip_edit")) {
             edit = true
             clip = intent.extras?.getParcelable("clip_edit")!!
@@ -64,11 +62,13 @@ class ClipActivity : AppCompatActivity() {
             if (clip.image != Uri.EMPTY) {
                 binding.chooseImage.text = getString(R.string.button_changeImage)
             }
+            if (clip.audio != Uri.EMPTY) {
+                binding.chooseAudio.text = "Change Audio"
+            }
             location = clip.location
         }
 
         i("clip: ${clip}")
-        mediaPlayer.setDataSource(this, clip.audio)
 
         binding.chooseAudio.setOnClickListener {
             showAudioPicker(audioIntentLauncher)
@@ -80,9 +80,11 @@ class ClipActivity : AppCompatActivity() {
                 mediaPlayer.prepare()
             }
         }
-        binding.playBtn.setOnClickListener{
+        binding.playBtn.setOnClickListener {
             mediaPlayer.start()
         }
+
+
         binding.pauseBtn.setOnClickListener{
             if (mediaPlayer.isPlaying) {
                 mediaPlayer.pause()
@@ -167,6 +169,7 @@ class ClipActivity : AppCompatActivity() {
                     RESULT_OK -> {
                         if (result.data != null) {
                             i("Got Result ${result.data!!.data}")
+                            i("Got Result $result")
                             clip.audio = result.data!!.data!!
                             binding.chooseAudio.setText(R.string.button_changeAudio)
                         }
