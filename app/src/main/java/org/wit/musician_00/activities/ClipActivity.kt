@@ -6,12 +6,14 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import org.wit.musician_00.R
@@ -23,6 +25,7 @@ import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.Location
 import timber.log.Timber.i
 import java.io.IOException
+import java.util.Random
 
 
 class ClipActivity : AppCompatActivity() {
@@ -68,10 +71,19 @@ class ClipActivity : AppCompatActivity() {
             binding.toolbarAdd.title = "Add New Clip"
         }
 
-
         setSupportActionBar(binding.toolbarAdd)
         i("clip: ${clip}")
 
+        // chip group tutorial https://www.youtube.com/watch?v=lU6YyPQWvgY
+        val genreList = arrayListOf("Rock", "Pop", "Jazz", "Country", "Rap")
+        genreList.forEach { genre ->
+            val chip = LayoutInflater.from(this).inflate(R.layout.chip_layout, binding.chipGroup, false) as Chip
+
+            chip.id = Random().nextInt()
+            chip.text = genre
+            binding.chipGroup.addView(chip)
+        }
+        binding.chipGroup
         binding.chooseAudio.setOnClickListener {
             showAudioPicker(audioIntentLauncher)
         }

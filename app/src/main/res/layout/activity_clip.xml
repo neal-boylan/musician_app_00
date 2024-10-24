@@ -7,19 +7,16 @@
     android:layout_height="match_parent"
     tools:context="org.wit.musician_00.activities.ClipActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
+            android:layout_width="411dp"
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
             android:fitsSystemWindows="true"
             app:elevation="0dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <androidx.appcompat.widget.Toolbar
@@ -29,140 +26,191 @@
                 app:titleTextColor="@color/colorPrimary" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/clipTitle"
+            android:layout_width="358dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/hint_clipTitle"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/clipDescription"
+            android:layout_width="358dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/hint_clipDescription"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clipTitle" />
+
+        <EditText
+            android:id="@+id/clipInstrument"
+            android:layout_width="358dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/hint_clipInstrument"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clipDescription" />
+
+        <Spinner
+            android:id="@+id/instrumentSpinner"
+            android:layout_width="358dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clipInstrument"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/instrumentSpinner">
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <Button
+            android:id="@+id/playBtn"
+            android:text="PLAY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/stopBtn"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroup"/>
+
+        <Button
+            android:id="@+id/stopBtn"
+            android:text="STOP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toStartOf="@+id/pauseBtn"
+            app:layout_constraintStart_toEndOf="@+id/playBtn"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroup"/>
+
+        <Button
+            android:id="@+id/pauseBtn"
+            android:text="PAUSE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toEndOf="@+id/chooseAudio"
+            app:layout_constraintStart_toEndOf="@+id/stopBtn"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroup"/>
+
+        <Button
+            android:id="@+id/chooseAudio"
+            android:text="@string/button_addAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pauseBtn"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroup"/>
+
+
+        <Button
+            android:id="@+id/clipLocation"
+            android:text="@string/button_location"
+            android:textAllCaps="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/playBtn"/>
+
+        <ImageView
+            android:id="@+id/clipImage"
+            android:layout_width="154dp"
+            android:layout_height="124dp"
+            android:importantForAccessibility="no"
+            app:srcCompat="@mipmap/ic_launcher"
+            tools:ignore="ImageContrastCheck"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clipLocation"/>
+
+        <Button
+            android:id="@+id/chooseImage"
+            android:text="@string/button_addImage"
+            android:textAllCaps="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@color/colorAccent"
+            android:importantForAccessibility="no"
+            android:padding="8dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            tools:ignore="VisualLintButtonSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clipImage"/>
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:text="@string/button_addClip"
+            android:textAllCaps="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/appBarLayout"
-            android:fillViewport="true">
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@color/colorAccent"
+            android:padding="8dp"
+            android:stateListAnimator="@null"
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chooseImage"/>
 
-                <EditText
-                    android:id="@+id/clipTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_margin="8dp"
-                    android:autofillHints="hint"
-                    android:hint="@string/hint_clipTitle"
-                    android:inputType="text"
-                    android:maxLength="25"
-                    android:maxLines="1"
-                    android:padding="8dp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/clipDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_margin="8dp"
-                    android:autofillHints="hint"
-                    android:hint="@string/hint_clipDescription"
-                    android:inputType="text"
-                    android:maxLength="25"
-                    android:maxLines="1"
-                    android:padding="8dp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="16sp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <Button
-                    android:id="@+id/chooseAudio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:background="@color/colorAccent"
-                    android:importantForAccessibility="no"
-                    android:padding="8dp"
-                    android:text="@string/button_addAudio"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
-                    android:textAllCaps="true"
-                    tools:ignore="VisualLintButtonSize" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                    <Button
-                        android:id="@+id/stopBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="STOP"
-                        android:layout_marginHorizontal="4dp"
-                        />
-
-                    <Button
-                        android:id="@+id/playBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="PLAY"
-                        android:layout_marginHorizontal="4dp"
-                        />
-
-                    <Button
-                        android:id="@+id/pauseBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="PAUSE"
-                        android:layout_marginHorizontal="4dp"
-                        />
-                    </LinearLayout>
-
-                <Button
-                    android:id="@+id/chooseImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:background="@color/colorAccent"
-                    android:importantForAccessibility="no"
-                    android:padding="8dp"
-                    android:text="@string/button_addImage"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
-                    android:textAllCaps="true"
-                    tools:ignore="VisualLintButtonSize" />
-
-                <ImageView
-                    android:id="@+id/clipImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:importantForAccessibility="no"
-                    app:srcCompat="@mipmap/ic_launcher"
-                    tools:ignore="ImageContrastCheck" />
-
-                <Button
-                    android:id="@+id/clipLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:background="@color/colorAccent"
-                    android:padding="8dp"
-                    android:stateListAnimator="@null"
-                    android:text="@string/button_location"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"/>
-
-                <Button
-                    android:id="@+id/btnAdd"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:background="@color/colorAccent"
-                    android:padding="8dp"
-                    android:stateListAnimator="@null"
-                    android:text="@string/button_addClip"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-        </ScrollView>
-
-    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
