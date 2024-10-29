@@ -10,6 +10,7 @@ import android.view.MenuItem
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.forEach
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -45,7 +46,17 @@ class ClipActivity : AppCompatActivity() {
         app = application as MainApp
         i("Clip Activity started..")
         mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
+        var chipId : Int = 0
+        // chip group tutorial https://www.youtube.com/watch?v=lU6YyPQWvgY
+        val genreList = arrayListOf("Rock", "Pop", "Jazz", "Country", "Rap")
+        genreList.forEach { genre ->
+            val chip = LayoutInflater.from(this).inflate(R.layout.chip_layout, binding.chipGroup, false) as Chip
 
+            chip.id = chipId
+            chipId++
+            chip.text = genre
+            binding.chipGroup.addView(chip)
+        }
 
         if (intent.hasExtra("clip_edit")) {
             edit = true
@@ -63,6 +74,11 @@ class ClipActivity : AppCompatActivity() {
                 binding.chooseAudio.text = "Change Audio"
             }
             location = clip.location
+            binding.chipGroup.forEach { item ->
+                i("genre item: ${item.id}")
+                if (clip.genres.contains(genreList[item.id])){
+                binding.chipGroup.check(item.id)}
+            }
         } else {
             binding.toolbarAdd.title = "Add New Clip"
         }
@@ -70,17 +86,7 @@ class ClipActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarAdd)
         i("clip: ${clip}")
 
-        // chip group tutorial https://www.youtube.com/watch?v=lU6YyPQWvgY
-        val genreList = arrayListOf("Rock", "Pop", "Jazz", "Country", "Rap")
-        genreList.forEach { genre ->
-            val chip = LayoutInflater.from(this).inflate(R.layout.chip_layout, binding.chipGroup, false) as Chip
-
-            chip.id = Random().nextInt()
-            chip.text = genre
-            binding.chipGroup.addView(chip)
-        }
-
-        var checkedGenres = arrayListOf<String>()
+        val checkedGenres = arrayListOf<String>()
 
         binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
             if (checkedIds.isEmpty()){
