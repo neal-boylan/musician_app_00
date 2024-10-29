@@ -30,6 +30,7 @@ class ClipMemStore : ClipStore {
             foundClip.yearsOfExperience = clip.yearsOfExperience
             foundClip.instrument = clip.instrument
             foundClip.influences = clip.influences
+            foundClip.genres = clip.genres
             foundClip.image = clip.image
             foundClip.audio = clip.audio
             foundClip.location = clip.location

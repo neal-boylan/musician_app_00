@@ -1,15 +1,12 @@
 package org.wit.musician_00.activities
 
 import android.content.Intent
-import android.media.AudioAttributes
-import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +21,6 @@ import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.Location
 import timber.log.Timber.i
-import java.io.IOException
 import java.util.Random
 
 
@@ -83,7 +79,24 @@ class ClipActivity : AppCompatActivity() {
             chip.text = genre
             binding.chipGroup.addView(chip)
         }
-        binding.chipGroup
+
+        var checkedGenres = arrayListOf<String>()
+
+        binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+            if (checkedIds.isEmpty()){
+                i("No Genres")
+            } else{
+                checkedGenres.clear()
+                checkedIds.forEach { idx ->
+                    val chip = findViewById<Chip>(idx)
+                    checkedGenres.add(chip.text.toString())
+                    // clip.genres.add(chip.text.toString())
+                }
+
+                i("Some genres: $checkedGenres")
+            }
+        }
+
         binding.chooseAudio.setOnClickListener {
             showAudioPicker(audioIntentLauncher)
         }
@@ -117,6 +130,8 @@ class ClipActivity : AppCompatActivity() {
         binding.btnAdd.setOnClickListener() {
             clip.title = binding.clipTitle.text.toString()
             clip.description = binding.clipDescription.text.toString()
+            clip.genres = checkedGenres
+
             if (clip.title.isNotEmpty()) {
                 if (edit) {
                     app.clips.update(clip.copy())
