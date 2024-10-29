@@ -31,6 +31,8 @@ class ClipMemStore : ClipStore {
             foundClip.instrument = clip.instrument
             foundClip.influences = clip.influences
             foundClip.genres = clip.genres
+            foundClip.clipDate = clip.clipDate
+            foundClip.clipEditDate = clip.clipEditDate
             foundClip.image = clip.image
             foundClip.audio = clip.audio
             foundClip.location = clip.location

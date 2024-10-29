@@ -32,6 +32,8 @@ class ClipAdapter constructor(private var clips: List<ClipModel>,
         fun bind(clip: ClipModel, listener: ClipListener) {
             binding.clipTitle.text = clip.title
             binding.clipDescription.text = clip.description
+            binding.clipDateAdded.text = clip.clipDate.toString()
+            binding.clipDateEdited.text = clip.clipEditDate.toString()
             Picasso.get().load(clip.image).resize(200,200).into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onClipClick(clip) }
         }

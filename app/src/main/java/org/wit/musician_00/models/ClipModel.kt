@@ -3,6 +3,7 @@ package org.wit.musician_00.models
 import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 import java.util.Date
@@ -18,7 +19,8 @@ data class ClipModel(
     var genres: ArrayList<String> = arrayListOf("Metal"),
     var image: Uri = Uri.EMPTY,
     var audio: Uri = Uri.EMPTY,
-    var clipDate: LocalDateTime = now(),
+    var clipDate: String = "Date Added: ${LocalDate.now()}",
+    var clipEditDate: String = "",
     var location: Location = Location(52.245696, -7.139102, 5f)) : Parcelable
 @Parcelize
 data class Location(var lat: Double = 0.0,

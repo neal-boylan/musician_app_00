@@ -22,6 +22,9 @@ import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.Location
 import timber.log.Timber.i
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalDateTime.now
 import java.util.Random
 
 
@@ -48,7 +51,7 @@ class ClipActivity : AppCompatActivity() {
         mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
         var chipId : Int = 0
         // chip group tutorial https://www.youtube.com/watch?v=lU6YyPQWvgY
-        val genreList = arrayListOf("Rock", "Pop", "Jazz", "Country", "Rap")
+        val genreList = arrayListOf("Rock", "Metal", "Alternative", "Pop", "Jazz", "Country", "Rap", "Blues", "Funk", "Soul", "Other")
         genreList.forEach { genre ->
             val chip = LayoutInflater.from(this).inflate(R.layout.chip_layout, binding.chipGroup, false) as Chip
 
@@ -140,8 +143,11 @@ class ClipActivity : AppCompatActivity() {
 
             if (clip.title.isNotEmpty()) {
                 if (edit) {
+                    clip.clipEditDate = "Last Edited: ${LocalDate.now()}"
+                    i("Edit: ${clip.clipEditDate}")
                     app.clips.update(clip.copy())
                 } else {
+                    clip.clipDate = "Date Added: ${LocalDate.now()}"
                     app.clips.create(clip.copy())
                 }
                 setResult(RESULT_OK)
