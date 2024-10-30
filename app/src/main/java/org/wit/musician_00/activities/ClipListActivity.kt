@@ -60,6 +60,13 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
                 val launcherIntent = Intent(this, LoginActivity::class.java)
                 getResult.launch(launcherIntent)
             }
+            R.id.item_user_details -> {
+                val launcherIntent = Intent(this, UserActivity::class.java).putExtra(
+                    "user_details",
+                    user
+                )
+                getResult.launch(launcherIntent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }

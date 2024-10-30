@@ -51,6 +51,7 @@ class ClipActivity : AppCompatActivity() {
         app = application as MainApp
         i("Clip Activity started..")
         user = intent.extras?.getParcelable("user_details")!!
+        i("user.userimage: ${user.userImage}")
         mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
 
         var chipId : Int = 0
@@ -90,7 +91,6 @@ class ClipActivity : AppCompatActivity() {
         }
 
         setSupportActionBar(binding.toolbarAdd)
-        i("clip: ${clip}")
 
         val checkedGenres = arrayListOf<String>()
 
@@ -144,6 +144,8 @@ class ClipActivity : AppCompatActivity() {
             clip.description = binding.clipDescription.text.toString()
             clip.genres = checkedGenres
 
+            clip.image = user.userImage
+            i("clip.image: ${clip.image}")
             if (clip.title.isNotEmpty()) {
                 if (edit) {
                     clip.userId = user.userId

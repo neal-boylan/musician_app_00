@@ -9,4 +9,10 @@ data class UserModel(
     var userId: Long = 0,
     var email: String = "",
     var password: String = "",
+    var userImage: Uri = Uri.EMPTY,
+    var userLocation: Location = Location(52.245696, -7.139102, 5f)
     ) : Parcelable
+@Parcelize
+data class UserLocation(var lat: Double = 0.0,
+                        var lng: Double = 0.0,
+                        var zoom: Float = 0f) : Parcelable

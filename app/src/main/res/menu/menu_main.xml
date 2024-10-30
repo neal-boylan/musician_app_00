@@ -7,6 +7,10 @@
         android:title="logout"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/item_user_details"
+        android:title="profile"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/item_add"
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/menu_addClip"
