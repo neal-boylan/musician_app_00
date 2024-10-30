@@ -14,66 +14,55 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import org.wit.musician_00.R
 import org.wit.musician_00.databinding.ActivityMapBinding
-import org.wit.musician_00.models.Location
+import org.wit.musician_00.models.UserLocation
 import androidx.activity.addCallback
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback,
-    GoogleMap.OnMarkerClickListener,
-    GoogleMap.OnMarkerDragListener {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener {
 
     private lateinit var map: GoogleMap
     private lateinit var binding: ActivityMapBinding
-    private var location = Location()
+    private var userLocation = UserLocation()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        location = intent.extras?.getParcelable<Location>("location")!!
+        userLocation = intent.extras?.getParcelable<UserLocation>("userLocation")!!
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         onBackPressedDispatcher.addCallback(this ) {
             val resultIntent = Intent()
-            resultIntent.putExtra("location", location)
+            resultIntent.putExtra("userLocation", userLocation)
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        val loc = LatLng(location.lat, location.lng)
+        val userLoc = LatLng(userLocation.lat, userLocation.lng)
         val options = MarkerOptions()
-            .title("Placemark")
-            .snippet("GPS : $loc")
+            .title("User")
+            .snippet("GPS : $userLoc")
             .draggable(true)
-            .position(loc)
+            .position(userLoc)
         map.addMarker(options)?.showInfoWindow()
         map.setOnMarkerDragListener(this)
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, location.zoom))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, userLocation.zoom))
     }
 
-    override fun onMarkerDrag(marker: Marker) {
-        val loc = LatLng(marker.position.latitude, marker.position.longitude)
-        marker.snippet = "GPS : $loc"
+    override fun onMarkerDrag(p0: Marker) {
+
     }
 
     override fun onMarkerDragEnd(marker: Marker) {
-        location.lat = marker.position.latitude
-        location.lng = marker.position.longitude
-        location.zoom = map.cameraPosition.zoom
+        userLocation.lat = marker.position.latitude
+        userLocation.lng = marker.position.longitude
+        userLocation.zoom = map.cameraPosition.zoom
     }
 
-    override fun onMarkerDragStart(marker: Marker) {
-        val loc = LatLng(marker.position.latitude, marker.position.longitude)
-        marker.snippet = "GPS : $loc"
-    }
+    override fun onMarkerDragStart(p0: Marker) {
 
-    override fun onMarkerClick(marker: Marker): Boolean {
-        val loc = LatLng(marker.position.latitude, marker.position.longitude)
-        marker.snippet = "GPS : $loc"
-        return false
     }
 }

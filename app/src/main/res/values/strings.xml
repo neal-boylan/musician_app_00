@@ -16,4 +16,8 @@
     <string name="select_clip_audio">Select Clip audio</string>
     <string name="button_location">Set Location</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="button_update_profile">Update Profile</string>
+
 </resources>

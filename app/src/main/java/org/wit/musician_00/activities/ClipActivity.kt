@@ -11,6 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -51,7 +52,6 @@ class ClipActivity : AppCompatActivity() {
         app = application as MainApp
         i("Clip Activity started..")
         user = intent.extras?.getParcelable("user_details")!!
-        i("user.userimage: ${user.userImage}")
         mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
 
         var chipId : Int = 0
@@ -72,12 +72,16 @@ class ClipActivity : AppCompatActivity() {
             i("This clip: $clip")
             binding.clipTitle.setText(clip.title)
             binding.clipDescription.setText(clip.description)
-            binding.btnAdd.text = getString(R.string.button_saveClip)
+            if (clip.userId == user.userId) {
+                binding.clipTitle.isEnabled = true
+                binding.clipDescription.isEnabled = true
+                binding.btnAdd.isVisible = true
+                binding.btnAdd.text = getString(R.string.button_saveClip)
+            } else {
+                binding.btnAdd.isVisible = false
+            }
             binding.toolbarAdd.title = clip.title
             Picasso.get().load(clip.image).into(binding.clipImage)
-            if (clip.image != Uri.EMPTY) {
-                binding.chooseImage.text = getString(R.string.button_changeImage)
-            }
             if (clip.audio != Uri.EMPTY) {
                 binding.chooseAudio.text = "Change Audio"
             }
@@ -88,6 +92,9 @@ class ClipActivity : AppCompatActivity() {
             }
         } else {
             binding.toolbarAdd.title = "Add New Clip"
+            binding.clipTitle.isEnabled = true
+            binding.clipDescription.isEnabled = true
+            binding.btnAdd.isVisible = true
         }
 
         setSupportActionBar(binding.toolbarAdd)
@@ -123,15 +130,10 @@ class ClipActivity : AppCompatActivity() {
             mediaPlayer.start()
         }
 
-
         binding.pauseBtn.setOnClickListener{
             if (mediaPlayer.isPlaying) {
                 mediaPlayer.pause()
             }
-        }
-
-        binding.chooseImage.setOnClickListener {
-            showImagePicker(imageIntentLauncher)
         }
 
         binding.clipLocation.setOnClickListener {
@@ -164,7 +166,6 @@ class ClipActivity : AppCompatActivity() {
             }
         }
 
-        registerImagePickerCallback()
         registerMapCallback()
         registerAudioPickerCallback()
 
@@ -187,25 +188,6 @@ class ClipActivity : AppCompatActivity() {
             R.id.item_cancel -> { finish() }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun registerImagePickerCallback() {
-        imageIntentLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { result ->
-                when(result.resultCode){
-                    RESULT_OK -> {
-                        if (result.data != null) {
-                            i("Got Result ${result.data!!.data}")
-                            clip.image = result.data!!.data!!
-                            Picasso.get().load(clip.image).into(binding.clipImage)
-                            binding.chooseImage.setText(R.string.button_changeImage)
-                        } // end of if
-                    }
-                    RESULT_CANCELED -> { }
-                    else -> { }
-                }
-            }
     }
 
     private fun registerAudioPickerCallback() {

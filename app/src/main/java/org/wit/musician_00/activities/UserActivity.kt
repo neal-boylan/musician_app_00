@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import org.wit.musician_00.R
@@ -12,6 +13,7 @@ import org.wit.musician_00.databinding.ActivityUserBinding
 import org.wit.musician_00.helpers.showImagePicker
 import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.Location
+import org.wit.musician_00.models.UserLocation
 import org.wit.musician_00.models.UserModel
 import timber.log.Timber.i
 
@@ -23,7 +25,7 @@ class UserActivity : AppCompatActivity() {
 
     var user = UserModel()
     lateinit var app : MainApp
-    var location = Location(52.245696, -7.139102, 5f)
+    // var userLocation = UserLocation(52.245696, -7.139102, 15f)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +37,7 @@ class UserActivity : AppCompatActivity() {
 
         binding.toolbarAdd.title = "User Details"
         binding.editUsername.setText(user.email)
-        location = user.userLocation
+        // userLocation = user.userLocation
 
         setSupportActionBar(binding.toolbarAdd)
 
@@ -44,7 +46,13 @@ class UserActivity : AppCompatActivity() {
         }
 
         binding.addUserLocation.setOnClickListener {
-            val launcherIntent = Intent(this, MapActivity::class.java).putExtra("location", user.userLocation)
+            val userLocation = UserLocation(52.245696, -7.139102, 5f)
+            if (user.zoom != 0f) {
+                userLocation.lat =  user.lat
+                userLocation.lng = user.lng
+                userLocation.zoom = user.zoom
+            }
+            val launcherIntent = Intent(this, MapActivity::class.java).putExtra("userLocation", userLocation)
             mapIntentLauncher.launch(launcherIntent)
         }
 
@@ -54,7 +62,12 @@ class UserActivity : AppCompatActivity() {
 
             if (user.email.isNotEmpty()) {
                 app.users.update(user.copy())
-
+                val clips = app.clips.findAll()
+                clips.forEach { clip ->
+                    if (clip.userId == user.userId) {
+                        clip.image = user.userImage
+                    }
+                }
                 setResult(RESULT_OK)
                 val launcherIntent =
                     Intent(this, ClipListActivity::class.java).putExtra(
@@ -99,14 +112,16 @@ class UserActivity : AppCompatActivity() {
                 when (result.resultCode) {
                     RESULT_OK -> {
                         if (result.data != null) {
-                            i("Got Location ${result.data.toString()}")
+                            i("Got User Location ${result.data.toString()}")
                             //location = result.data!!.extras?.getParcelable("location",Location::class.java)!!
-                            user.userLocation = result.data!!.extras?.getParcelable("location")!!
-                            i("Location == ${user.userLocation}")
+                            val userLocation = result.data!!.extras?.getParcelable<UserLocation>("userLocation")!!
+                            i("Location == $userLocation")
+                            user.lat = userLocation.lat
+                            user.lng = userLocation.lng
+                            user.zoom = userLocation.zoom
                         } // end of if
                     }
-                    RESULT_CANCELED -> { i("Cancel") }
-                    else -> { i("else") }
+                    RESULT_CANCELED -> { } else -> { }
                 }
             }
     }

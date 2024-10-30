@@ -37,6 +37,7 @@
 
         <EditText
             android:id="@+id/clipTitle"
+            android:enabled="false"
             android:layout_width="358dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
@@ -51,6 +52,7 @@
 
         <EditText
             android:id="@+id/clipDescription"
+            android:enabled="false"
             android:layout_width="358dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
@@ -139,6 +141,7 @@
 
         <Button
             android:id="@+id/chooseAudio"
+            android:visible="false"
             android:text="@string/button_addAudio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -178,23 +181,7 @@
             app:layout_constraintTop_toBottomOf="@+id/clipLocation"/>
 
         <Button
-            android:id="@+id/chooseImage"
-            android:text="@string/button_addImage"
-            android:textAllCaps="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:background="@color/colorAccent"
-            android:importantForAccessibility="no"
-            android:padding="8dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            tools:ignore="VisualLintButtonSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clipImage"/>
-
-        <Button
+            android:visible="false"
             android:id="@+id/btnAdd"
             android:text="@string/button_addClip"
             android:textAllCaps="true"
@@ -208,7 +195,8 @@
             android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chooseImage"/>
+            app:layout_constraintTop_toBottomOf="@+id/clipImage"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

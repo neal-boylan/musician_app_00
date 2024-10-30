@@ -4,9 +4,6 @@ import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalDateTime.now
-import java.util.Date
 
 @Parcelize
 data class ClipModel(

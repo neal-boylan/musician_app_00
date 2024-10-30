@@ -43,7 +43,7 @@
             android:layout_marginTop="64dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="@string/hint_clipTitle"
+            android:hint="@string/hint_username"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,8 +57,8 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="@string/hint_clipDescription"
-            android:inputType="text"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editUsername" />
@@ -109,7 +109,7 @@
 
         <Button
             android:id="@+id/userBtnAdd"
-            android:text="@string/button_addClip"
+            android:text="@string/button_update_profile"
             android:textAllCaps="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
