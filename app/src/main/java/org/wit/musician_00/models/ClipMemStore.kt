@@ -26,6 +26,7 @@ class ClipMemStore : ClipStore {
         var foundClip: ClipModel? = clips.find { c -> c.id == clip.id }
         if (foundClip != null) {
             foundClip.title = clip.title
+            foundClip.userId = clip.userId
             foundClip.description = clip.description
             foundClip.yearsOfExperience = clip.yearsOfExperience
             foundClip.instrument = clip.instrument

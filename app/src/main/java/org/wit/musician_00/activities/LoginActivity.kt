@@ -37,9 +37,7 @@ class LoginActivity : AppCompatActivity() {
                 if (app.users.findByEmail(binding.username.text.toString())?.email != "") {
                     if (app.users.findByEmail(binding.username.text.toString())?.password == binding.password.text.toString()) {
                         Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
-                        user.email = binding.username.text.toString()
-                        user.password = binding.password.text.toString()
-                        app.users.create(user.copy())
+                        user = app.users.findByEmail(binding.username.text.toString())!!
                         setResult(RESULT_OK)
                         val launcherIntent =
                             Intent(this, ClipListActivity::class.java).putExtra(

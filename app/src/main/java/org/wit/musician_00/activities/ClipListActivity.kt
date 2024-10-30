@@ -50,7 +50,10 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_add -> {
-                val launcherIntent = Intent(this, ClipActivity::class.java)
+                val launcherIntent = Intent(this, ClipActivity::class.java).putExtra(
+                    "user_details",
+                    user
+                )
                 getResult.launch(launcherIntent)
             }
             R.id.item_logout -> {
@@ -71,6 +74,7 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
     override fun onClipClick(clip: ClipModel) {
         val launcherIntent = Intent(this, ClipActivity::class.java)
         launcherIntent.putExtra("clip_edit", clip)
+        launcherIntent.putExtra("user_details", user)
         getClickResult.launch(launcherIntent)
     }
 

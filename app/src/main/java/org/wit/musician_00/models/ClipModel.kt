@@ -11,6 +11,7 @@ import java.util.Date
 @Parcelize
 data class ClipModel(
     var id: Long = 2,
+    var userId: Long = 0,
     var title: String = "",
     var description: String = "",
     var instrument: String = "",

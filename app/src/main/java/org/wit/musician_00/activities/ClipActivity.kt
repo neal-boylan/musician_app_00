@@ -21,6 +21,7 @@ import org.wit.musician_00.helpers.showImagePicker
 import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.Location
+import org.wit.musician_00.models.UserModel
 import timber.log.Timber.i
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -37,6 +38,7 @@ class ClipActivity : AppCompatActivity() {
     private lateinit var mediaPlayer: MediaPlayer
 
     var clip = ClipModel()
+    var user = UserModel()
     lateinit var app : MainApp
     var location = Location(52.245696, -7.139102, 5f)
 
@@ -48,7 +50,9 @@ class ClipActivity : AppCompatActivity() {
 
         app = application as MainApp
         i("Clip Activity started..")
+        user = intent.extras?.getParcelable("user_details")!!
         mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
+
         var chipId : Int = 0
         // chip group tutorial https://www.youtube.com/watch?v=lU6YyPQWvgY
         val genreList = arrayListOf("Rock", "Metal", "Alternative", "Pop", "Jazz", "Country", "Rap", "Blues", "Funk", "Soul", "Other")
@@ -78,7 +82,6 @@ class ClipActivity : AppCompatActivity() {
             }
             location = clip.location
             binding.chipGroup.forEach { item ->
-                i("genre item: ${item.id}")
                 if (clip.genres.contains(genreList[item.id])){
                 binding.chipGroup.check(item.id)}
             }
@@ -143,10 +146,11 @@ class ClipActivity : AppCompatActivity() {
 
             if (clip.title.isNotEmpty()) {
                 if (edit) {
+                    clip.userId = user.userId
                     clip.clipEditDate = "Last Edited: ${LocalDate.now()}"
-                    i("Edit: ${clip.clipEditDate}")
                     app.clips.update(clip.copy())
                 } else {
+                    clip.userId = user.userId
                     clip.clipDate = "Date Added: ${LocalDate.now()}"
                     app.clips.create(clip.copy())
                 }
