@@ -13,7 +13,8 @@ data class UserModel(
     // var userLocation: UserLocation = UserLocation(52.245696, -7.139102, 15f)
     var lat : Double = 0.0,
     var lng: Double = 0.0,
-    var zoom: Float = 0f
+    var zoom: Float = 0f,
+    var userLocation: Location = Location(lat, lng, zoom)
     ) : Parcelable
 @Parcelize
 data class UserLocation(var lat: Double = 0.0,

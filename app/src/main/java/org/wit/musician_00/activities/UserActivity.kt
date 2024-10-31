@@ -26,7 +26,6 @@ class UserActivity : AppCompatActivity() {
 
     var user = UserModel()
     lateinit var app : MainApp
-    // var userLocation = UserLocation(52.245696, -7.139102, 15f)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +44,6 @@ class UserActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarAdd)
 
         binding.chooseUserImage.setOnClickListener {
-            // showImagePicker(imageIntentLauncher)
             val request = PickVisualMediaRequest.Builder()
                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly)
                 .build()
@@ -53,13 +51,14 @@ class UserActivity : AppCompatActivity() {
         }
 
         binding.addUserLocation.setOnClickListener {
-            val userLocation = UserLocation(52.245696, -7.139102, 5f)
-            if (user.zoom != 0f) {
-                userLocation.lat =  user.lat
-                userLocation.lng = user.lng
-                userLocation.zoom = user.zoom
+            var userLocation = Location(52.245696, -7.139102, 5f)
+            if (user.userLocation.zoom != 0f) {
+                userLocation.lat =  user.userLocation.lat
+                userLocation.lng = user.userLocation.lng
+                userLocation.zoom = user.userLocation.zoom
+                userLocation = user.userLocation
             }
-            val launcherIntent = Intent(this, MapActivity::class.java).putExtra("userLocation", userLocation)
+            val launcherIntent = Intent(this, MapActivity::class.java).putExtra("location", userLocation)
             mapIntentLauncher.launch(launcherIntent)
         }
 
@@ -74,6 +73,9 @@ class UserActivity : AppCompatActivity() {
                 clips.forEach { c ->
                     if (c.userId == user.userId) {
                         c.image = user.userImage
+                        c.location.lat = user.userLocation.lat
+                        c.location.lng = user.userLocation.lng
+                        c.location.zoom = user.userLocation.zoom
                         app.clips.update(c.copy())
                     }
                 }
@@ -118,11 +120,11 @@ class UserActivity : AppCompatActivity() {
                         if (result.data != null) {
                             i("Got User Location ${result.data.toString()}")
                             //location = result.data!!.extras?.getParcelable("location",Location::class.java)!!
-                            val userLocation = result.data!!.extras?.getParcelable<UserLocation>("userLocation")!!
+                            val userLocation = result.data!!.extras?.getParcelable<Location>("location")!!
                             i("Location == $userLocation")
-                            user.lat = userLocation.lat
-                            user.lng = userLocation.lng
-                            user.zoom = userLocation.zoom
+                            user.userLocation.lat = userLocation.lat
+                            user.userLocation.lng = userLocation.lng
+                            user.userLocation.zoom = userLocation.zoom
                         } // end of if
                     }
                     RESULT_CANCELED -> { } else -> { }

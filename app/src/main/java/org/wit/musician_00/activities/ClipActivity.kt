@@ -33,7 +33,6 @@ import java.util.Random
 class ClipActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityClipBinding
-    private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var audioIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mediaPlayer: MediaPlayer
@@ -54,31 +53,46 @@ class ClipActivity : AppCompatActivity() {
         user = intent.extras?.getParcelable("user_details")!!
         mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
 
+
         var chipId : Int = 0
         // chip group tutorial https://www.youtube.com/watch?v=lU6YyPQWvgY
-        val genreList = arrayListOf("Rock", "Metal", "Alternative", "Pop", "Jazz", "Country", "Rap", "Blues", "Funk", "Soul", "Other")
+        var genreList = arrayListOf("Rock", "Metal", "Alternative", "Pop", "Jazz", "Country", "Rap", "Blues", "Funk", "Soul", "Other")
+
+        if (intent.hasExtra("clip_edit")) {
+            clip = intent.extras?.getParcelable("clip_edit")!!
+            if (clip.userId != user.userId) {
+                genreList.clear()
+                genreList = clip.genres
+            }
+        }
+
         genreList.forEach { genre ->
             val chip = LayoutInflater.from(this).inflate(R.layout.chip_layout, binding.chipGroup, false) as Chip
-
             chip.id = chipId
             chipId++
             chip.text = genre
+            chip.isCheckable = true
+            if (clip.userId != user.userId) { chip.isCheckable = false}
             binding.chipGroup.addView(chip)
         }
 
         if (intent.hasExtra("clip_edit")) {
-            edit = true
             clip = intent.extras?.getParcelable("clip_edit")!!
-            i("This clip: $clip")
+            edit = true
             binding.clipTitle.setText(clip.title)
             binding.clipDescription.setText(clip.description)
             if (clip.userId == user.userId) {
                 binding.clipTitle.isEnabled = true
+                binding.clipTitle.background = null
                 binding.clipDescription.isEnabled = true
                 binding.btnAdd.isVisible = true
                 binding.btnAdd.text = getString(R.string.button_saveClip)
+                binding.clipLocation.isVisible = false
             } else {
+                i("clip.user != user")
                 binding.btnAdd.isVisible = false
+                binding.chooseAudio.isVisible = false
+                binding.clipLocation.text = "View Location"
             }
             binding.toolbarAdd.title = clip.title
             Picasso.get().load(clip.image).into(binding.clipImage)
@@ -111,8 +125,6 @@ class ClipActivity : AppCompatActivity() {
                     checkedGenres.add(chip.text.toString())
                     // clip.genres.add(chip.text.toString())
                 }
-
-                i("Some genres: $checkedGenres")
             }
         }
 
@@ -137,7 +149,10 @@ class ClipActivity : AppCompatActivity() {
         }
 
         binding.clipLocation.setOnClickListener {
-            val launcherIntent = Intent(this, MapActivity::class.java).putExtra("location", clip.location)
+            val launcherIntent = Intent(this, MapActivity::class.java)
+            launcherIntent.putExtra("location", clip.location)
+            if (intent.hasExtra("clip_edit")) {
+            launcherIntent.putExtra("clip_edit", clip)}
             mapIntentLauncher.launch(launcherIntent)
         }
 
@@ -218,7 +233,7 @@ class ClipActivity : AppCompatActivity() {
                         if (result.data != null) {
                             i("Got Location ${result.data.toString()}")
                             //location = result.data!!.extras?.getParcelable("location",Location::class.java)!!
-                            clip.location = result.data!!.extras?.getParcelable("location")!!
+                            clip.location = result.data!!.extras?.getParcelable("userLocation")!!
                             i("Location == ${clip.location}")
                         } // end of if
                     }

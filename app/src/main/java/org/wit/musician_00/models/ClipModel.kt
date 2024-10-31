@@ -19,7 +19,12 @@ data class ClipModel(
     var audio: Uri = Uri.EMPTY,
     var clipDate: String = "Date Added: ${LocalDate.now()}",
     var clipEditDate: String = "",
-    var location: Location = Location(52.245696, -7.139102, 5f)) : Parcelable
+    // var location: Location = Location(52.245696, -7.139102, 5f)
+    var lat: Double = 0.0,
+    var lng: Double = 0.0,
+    var zoom: Float = 0f,
+    var location: Location = Location(lat, lng, zoom)) : Parcelable
+
 @Parcelize
 data class Location(var lat: Double = 0.0,
                     var lng: Double = 0.0,
