@@ -17,7 +17,7 @@ import org.wit.musician_00.databinding.ActivityMapBinding
 import org.wit.musician_00.models.UserLocation
 import androidx.activity.addCallback
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener {
 
     private lateinit var map: GoogleMap
     private lateinit var binding: ActivityMapBinding
@@ -48,12 +48,20 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
             .draggable(true)
             .position(userLoc)
         map.addMarker(options)?.showInfoWindow()
+        map.uiSettings.isZoomControlsEnabled = true
+        map.uiSettings.isZoomGesturesEnabled = true
+        map.setOnMarkerClickListener(this)
         map.setOnMarkerDragListener(this)
+        map.setOnCameraMoveListener(this)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, userLocation.zoom))
     }
 
-    override fun onMarkerDrag(p0: Marker) {
-
+    override fun onMarkerDrag(marker: Marker) {
+        userLocation.lat = marker.position.latitude
+        userLocation.lng = marker.position.longitude
+        userLocation.zoom = map.cameraPosition.zoom
+        val loc = LatLng(userLocation.lat, userLocation.lng)
+        marker.snippet = "GPS : $loc"
     }
 
     override fun onMarkerDragEnd(marker: Marker) {
@@ -62,7 +70,24 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
         userLocation.zoom = map.cameraPosition.zoom
     }
 
-    override fun onMarkerDragStart(p0: Marker) {
+    override fun onMarkerDragStart(marker: Marker) {
+        userLocation.lat = marker.position.latitude
+        userLocation.lng = marker.position.longitude
+        userLocation.zoom = map.cameraPosition.zoom
+        val loc = LatLng(userLocation.lat, userLocation.lng)
+        marker.snippet = "GPS : $loc"
+    }
 
+    override fun onMarkerClick(marker: Marker): Boolean {
+        userLocation.lat = marker.position.latitude
+        userLocation.lng = marker.position.longitude
+        userLocation.zoom = map.cameraPosition.zoom
+        val loc = LatLng(userLocation.lat, userLocation.lng)
+        marker.snippet = "GPS : $loc"
+        return false
+    }
+
+    override fun onCameraMove() {
+        userLocation.zoom = map.cameraPosition.zoom
     }
 }
