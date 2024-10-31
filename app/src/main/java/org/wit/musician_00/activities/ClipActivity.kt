@@ -41,10 +41,12 @@ class ClipActivity : AppCompatActivity() {
     var user = UserModel()
     lateinit var app : MainApp
     var location = Location(52.245696, -7.139102, 5f)
+    var edit = false
+    var userClip = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var edit = false
+
         binding = ActivityClipBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -72,7 +74,8 @@ class ClipActivity : AppCompatActivity() {
             chipId++
             chip.text = genre
             chip.isCheckable = true
-            if (clip.userId != user.userId) { chip.isCheckable = false}
+            if (clip.userId != user.userId || clip.userId != 0L) { chip.isCheckable = false}
+
             binding.chipGroup.addView(chip)
         }
 
@@ -82,6 +85,7 @@ class ClipActivity : AppCompatActivity() {
             binding.clipTitle.setText(clip.title)
             binding.clipDescription.setText(clip.description)
             if (clip.userId == user.userId) {
+                userClip = true
                 binding.clipTitle.isEnabled = true
                 binding.clipTitle.background = null
                 binding.clipDescription.isEnabled = true
@@ -149,8 +153,14 @@ class ClipActivity : AppCompatActivity() {
         }
 
         binding.clipLocation.setOnClickListener {
+            val location = Location(52.245696, -7.139102, 15f)
+            if (clip.zoom != 0f) {
+                location.lat =  clip.lat
+                location.lng = clip.lng
+                location.zoom = clip.zoom
+            }
             val launcherIntent = Intent(this, MapActivity::class.java)
-            launcherIntent.putExtra("location", clip.location)
+            launcherIntent.putExtra("location", location)
             if (intent.hasExtra("clip_edit")) {
             launcherIntent.putExtra("clip_edit", clip)}
             mapIntentLauncher.launch(launcherIntent)
@@ -162,7 +172,10 @@ class ClipActivity : AppCompatActivity() {
             clip.genres = checkedGenres
 
             clip.image = user.userImage
-            i("clip.image: ${clip.image}")
+            clip.lat = user.lat
+            clip.lng = user.lng
+            clip.zoom = user.zoom
+
             if (clip.title.isNotEmpty()) {
                 if (edit) {
                     clip.userId = user.userId
@@ -195,11 +208,17 @@ class ClipActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_clip, menu)
+        if (userClip) menu.getItem(0).isVisible = true
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.item_delete -> {
+                app.clips.delete(clip)
+                setResult(99)
+                finish()
+            }
             R.id.item_cancel -> { finish() }
         }
         return super.onOptionsItemSelected(item)

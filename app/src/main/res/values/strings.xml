@@ -7,6 +7,7 @@
     <string name="hint_clipInstrument">Clip Instrument</string>
     <string name="hint_clipGenres">Clip Genres</string>
     <string name="menu_addClip">Add</string>
+    <string name="menu_delete">Delete</string>
     <string name="menu_cancel">Cancel</string>
     <string name="button_addImage">Add Image</string>
     <string name="button_addAudio">Add Audio</string>

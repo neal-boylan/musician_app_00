@@ -6,4 +6,5 @@ interface UserStore {
     fun findByUserId(userId:Long) : UserModel?
     fun create(user: UserModel)
     fun update(user: UserModel)
+    fun delete(user: UserModel)
 }

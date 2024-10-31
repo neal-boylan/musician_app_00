@@ -8,10 +8,10 @@ import org.wit.musician_00.databinding.CardClipBinding
 import org.wit.musician_00.models.ClipModel
 
 interface ClipListener {
-    fun onClipClick(clip: ClipModel)
+    fun onClipClick(clip: ClipModel, position: Int)
 }
 
-class ClipAdapter constructor(private var clips: List<ClipModel>,
+class ClipAdapter (private var clips: List<ClipModel>,
                               private val listener: ClipListener ) :
                               RecyclerView.Adapter<ClipAdapter.MainHolder>() {
 
@@ -32,10 +32,10 @@ class ClipAdapter constructor(private var clips: List<ClipModel>,
         fun bind(clip: ClipModel, listener: ClipListener) {
             binding.clipTitle.text = clip.title
             binding.clipDescription.text = clip.description
-            binding.clipDateAdded.text = clip.clipDate.toString()
-            binding.clipDateEdited.text = clip.clipEditDate.toString()
+            binding.clipDateAdded.text = clip.clipDate
+            binding.clipDateEdited.text = clip.clipEditDate
             Picasso.get().load(clip.image).resize(200,200).into(binding.imageIcon)
-            binding.root.setOnClickListener { listener.onClipClick(clip) }
+            binding.root.setOnClickListener { listener.onClipClick(clip, adapterPosition) }
         }
     }
 }

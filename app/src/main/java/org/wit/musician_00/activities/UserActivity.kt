@@ -14,7 +14,6 @@ import org.wit.musician_00.databinding.ActivityUserBinding
 import org.wit.musician_00.helpers.showImagePicker
 import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.Location
-import org.wit.musician_00.models.UserLocation
 import org.wit.musician_00.models.UserModel
 import timber.log.Timber.i
 
@@ -73,9 +72,9 @@ class UserActivity : AppCompatActivity() {
                 clips.forEach { c ->
                     if (c.userId == user.userId) {
                         c.image = user.userImage
-                        c.location.lat = user.userLocation.lat
-                        c.location.lng = user.userLocation.lng
-                        c.location.zoom = user.userLocation.zoom
+                        c.lat = user.lat
+                        c.lng = user.lng
+                        c.zoom = user.zoom
                         app.clips.update(c.copy())
                     }
                 }
@@ -122,9 +121,10 @@ class UserActivity : AppCompatActivity() {
                             //location = result.data!!.extras?.getParcelable("location",Location::class.java)!!
                             val userLocation = result.data!!.extras?.getParcelable<Location>("location")!!
                             i("Location == $userLocation")
-                            user.userLocation.lat = userLocation.lat
-                            user.userLocation.lng = userLocation.lng
-                            user.userLocation.zoom = userLocation.zoom
+                            user.lat = userLocation.lat
+                            user.lng = userLocation.lng
+                            user.zoom = userLocation.zoom
+                            user.userLocation = Location(userLocation.lat, userLocation.lng, userLocation.zoom)
                         } // end of if
                     }
                     RESULT_CANCELED -> { } else -> { }

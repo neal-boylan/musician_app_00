@@ -41,6 +41,10 @@ class ClipMemStore : ClipStore {
         }
     }
 
+    override fun delete(clip: ClipModel) {
+        clips.remove(clip)
+    }
+
     private fun logAll() {
         clips.forEach{ i("$it") }
     }

@@ -14,7 +14,7 @@ data class ClipModel(
     var instrument: String = "",
     var yearsOfExperience: Number = 0,
     var influences: ArrayList<String> = arrayListOf(),
-    var genres: ArrayList<String> = arrayListOf("Metal"),
+    var genres: ArrayList<String> = arrayListOf(),
     var image: Uri = Uri.EMPTY,
     var audio: Uri = Uri.EMPTY,
     var clipDate: String = "Date Added: ${LocalDate.now()}",
@@ -23,9 +23,9 @@ data class ClipModel(
     var lat: Double = 0.0,
     var lng: Double = 0.0,
     var zoom: Float = 0f,
-    var location: Location = Location(lat, lng, zoom)) : Parcelable
+    var location: Location = Location()) : Parcelable
 
-@Parcelize
-data class Location(var lat: Double = 0.0,
-                    var lng: Double = 0.0,
-                    var zoom: Float = 0f) : Parcelable
+//@Parcelize
+//data class Location(var lat: Double = 0.0,
+//                    var lng: Double = 0.0,
+//                    var zoom: Float = 0f) : Parcelable

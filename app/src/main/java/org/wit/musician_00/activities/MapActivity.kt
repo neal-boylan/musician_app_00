@@ -14,9 +14,8 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import org.wit.musician_00.R
 import org.wit.musician_00.databinding.ActivityMapBinding
-import org.wit.musician_00.models.UserLocation
-import androidx.activity.addCallback
 import org.wit.musician_00.models.Location
+import androidx.activity.addCallback
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener {
 

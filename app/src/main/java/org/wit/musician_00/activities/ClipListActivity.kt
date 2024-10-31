@@ -18,6 +18,8 @@ import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.UserModel
 import timber.log.Timber.i
 
+private var pos: Int = 0
+
 class ClipListActivity : AppCompatActivity(), ClipListener {
 
     var user = UserModel()
@@ -78,10 +80,11 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
             }
         }
 
-    override fun onClipClick(clip: ClipModel) {
+    override fun onClipClick(clip: ClipModel, position: Int) {
         val launcherIntent = Intent(this, ClipActivity::class.java)
         launcherIntent.putExtra("clip_edit", clip)
         launcherIntent.putExtra("user_details", user)
+        pos = position
         getClickResult.launch(launcherIntent)
     }
 
@@ -89,6 +92,9 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
         {
             if (it.resultCode == Activity.RESULT_OK) {
                 (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.clips.findAll().size)
+            }
+            else if (it.resultCode == 99) {
+                (binding.recyclerView.adapter)?.notifyItemRemoved(pos)
             }
         }
 }
