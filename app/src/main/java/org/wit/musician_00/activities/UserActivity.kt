@@ -3,6 +3,7 @@ package org.wit.musician_00.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -20,7 +21,7 @@ import timber.log.Timber.i
 class UserActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUserBinding
-    private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var imageIntentLauncher : ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
 
     var user = UserModel()
@@ -37,12 +38,18 @@ class UserActivity : AppCompatActivity() {
 
         binding.toolbarAdd.title = "User Details"
         binding.editUsername.setText(user.email)
+        binding.editPassword.setText(user.password)
+        Picasso.get().load(user.userImage).into(binding.userImage)
         // userLocation = user.userLocation
 
         setSupportActionBar(binding.toolbarAdd)
 
         binding.chooseUserImage.setOnClickListener {
-            showImagePicker(imageIntentLauncher)
+            // showImagePicker(imageIntentLauncher)
+            val request = PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                .build()
+            imageIntentLauncher.launch(request)
         }
 
         binding.addUserLocation.setOnClickListener {
@@ -63,9 +70,11 @@ class UserActivity : AppCompatActivity() {
             if (user.email.isNotEmpty()) {
                 app.users.update(user.copy())
                 val clips = app.clips.findAll()
-                clips.forEach { clip ->
-                    if (clip.userId == user.userId) {
-                        clip.image = user.userImage
+
+                clips.forEach { c ->
+                    if (c.userId == user.userId) {
+                        c.image = user.userImage
+                        app.clips.update(c.copy())
                     }
                 }
                 setResult(RESULT_OK)
@@ -87,22 +96,17 @@ class UserActivity : AppCompatActivity() {
     }
 
     private fun registerImagePickerCallback() {
-        imageIntentLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { result ->
-                when(result.resultCode){
-                    RESULT_OK -> {
-                        if (result.data != null) {
-                            i("Got Result ${result.data!!.data}")
-                            user.userImage = result.data!!.data!!
-                            Picasso.get().load(user.userImage).into(binding.userImage)
-                            binding.chooseUserImage.setText(R.string.button_changeImage)
-                        } // end of if
-                    }
-                    RESULT_CANCELED -> { }
-                    else -> { }
-                }
+        imageIntentLauncher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+            try{
+                contentResolver.takePersistableUriPermission(it!!, Intent.FLAG_GRANT_READ_URI_PERMISSION )
+                user.userImage = it // The returned Uri
+                i("IMG :: ${user.userImage}")
+                Picasso.get().load(user.userImage).into(binding.userImage)
             }
+            catch(e:Exception){
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun registerMapCallback() {
