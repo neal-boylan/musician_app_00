@@ -54,7 +54,7 @@ class ClipActivity : AppCompatActivity() {
         i("Clip Activity started..")
         user = intent.extras?.getParcelable("user_details")!!
         mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
-
+        binding.clipLocation.isVisible = false
 
         var chipId : Int = 0
         // chip group tutorial https://www.youtube.com/watch?v=lU6YyPQWvgY
@@ -94,11 +94,11 @@ class ClipActivity : AppCompatActivity() {
                 binding.clipDescription.isEnabled = true
                 binding.btnAdd.isVisible = true
                 binding.btnAdd.text = getString(R.string.button_saveClip)
-                binding.clipLocation.isVisible = false
             } else {
                 i("clip.user != user")
                 binding.btnAdd.isVisible = false
                 binding.chooseAudio.isVisible = false
+                binding.clipLocation.isVisible = true
                 binding.clipLocation.text = "View Location"
             }
             binding.toolbarAdd.title = clip.title

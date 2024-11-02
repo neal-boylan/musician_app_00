@@ -2,6 +2,9 @@ package org.wit.musician_00.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -103,22 +106,20 @@ class UserActivity : AppCompatActivity() {
                 }
             }
             app.clips.deleteAll(clipsToDelete)
-//            setResult(RESULT_OK)
-            Snackbar.make(it,"All clips deleted", Snackbar.LENGTH_LONG).show()
-//            finish()
 
-//            val launcherIntent = Intent(this, LoginActivity::class.java)
-//            startActivity(launcherIntent)
+            Snackbar.make(it,"All clips deleted, save changes to confirm", Snackbar.LENGTH_LONG).show()
+
         }
 
         binding.userBtnDelete.setOnClickListener() {
-            val clips = app.clips.findAll()
-
-            clips.forEach { c ->
+            val userClips = app.clips.findAll()
+            val clipsToDelete = mutableListOf<ClipModel>()
+            userClips.forEach { c ->
                 if (c.userId == user.userId) {
-                    app.clips.delete(c)
+                    clipsToDelete.add(c)
                 }
             }
+            app.clips.deleteAll(clipsToDelete)
             app.users.delete(user)
             setResult(RESULT_OK)
             Snackbar.make(it,"Account and clips deleted", Snackbar.LENGTH_LONG).show()
@@ -129,6 +130,21 @@ class UserActivity : AppCompatActivity() {
 
         registerImagePickerCallback()
         registerMapCallback()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_user, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.user_cancel -> {
+                finish()
+                Toast.makeText(this, "Changes not Saved", Toast.LENGTH_SHORT).show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun registerImagePickerCallback() {

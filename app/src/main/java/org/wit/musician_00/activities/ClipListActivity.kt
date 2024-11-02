@@ -41,7 +41,6 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
         app = application as MainApp
 
         user = intent.extras?.getParcelable("user_details")!!
-        i("This user: $user")
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
@@ -59,7 +58,6 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
 
             }
         })
-
     }
 
     private fun filterList(query : String?){
