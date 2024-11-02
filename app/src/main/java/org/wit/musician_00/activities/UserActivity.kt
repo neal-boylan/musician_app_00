@@ -14,7 +14,7 @@ import org.wit.musician_00.databinding.ActivityUserBinding
 import org.wit.musician_00.helpers.showImagePicker
 import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
-import org.wit.musician_00.models.Location
+import org.wit.musician_00.models.UserLocation
 import org.wit.musician_00.models.UserModel
 import timber.log.Timber.i
 
@@ -51,7 +51,7 @@ class UserActivity : AppCompatActivity() {
         }
 
         binding.addUserLocation.setOnClickListener {
-            var userLocation = Location(52.245696, -7.139102, 5f)
+            var userLocation = UserLocation(52.245696, -7.139102, 5f)
             if (user.userLocation.zoom != 0f) {
                 userLocation.lat =  user.userLocation.lat
                 userLocation.lng = user.userLocation.lng
@@ -96,13 +96,12 @@ class UserActivity : AppCompatActivity() {
         binding.userClipsDelete.setOnClickListener() {
             i("All clips delete clicked")
             val userClips = app.clips.findAll()
-            var clipsToDelete = mutableListOf<ClipModel>()
+            val clipsToDelete = mutableListOf<ClipModel>()
             userClips.forEach { c ->
                 if (c.userId == user.userId) {
                     clipsToDelete.add(c)
                 }
             }
-
             app.clips.deleteAll(clipsToDelete)
 //            setResult(RESULT_OK)
             Snackbar.make(it,"All clips deleted", Snackbar.LENGTH_LONG).show()
@@ -155,12 +154,12 @@ class UserActivity : AppCompatActivity() {
                         if (result.data != null) {
                             i("Got User Location ${result.data.toString()}")
                             //location = result.data!!.extras?.getParcelable("location",Location::class.java)!!
-                            val userLocation = result.data!!.extras?.getParcelable<Location>("location")!!
+                            val userLocation = result.data!!.extras?.getParcelable<UserLocation>("location")!!
                             i("Location == $userLocation")
                             user.lat = userLocation.lat
                             user.lng = userLocation.lng
                             user.zoom = userLocation.zoom
-                            user.userLocation = Location(userLocation.lat, userLocation.lng, userLocation.zoom)
+                            user.userLocation = UserLocation(userLocation.lat, userLocation.lng, userLocation.zoom)
                         } // end of if
                     }
                     RESULT_CANCELED -> { } else -> { }

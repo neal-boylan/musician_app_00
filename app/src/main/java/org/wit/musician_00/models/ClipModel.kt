@@ -23,7 +23,7 @@ data class ClipModel(
     var lat: Double = 0.0,
     var lng: Double = 0.0,
     var zoom: Float = 0f,
-    var location: Location = Location()) : Parcelable
+    var location: UserLocation = UserLocation()) : Parcelable
 
 //@Parcelize
 //data class Location(var lat: Double = 0.0,

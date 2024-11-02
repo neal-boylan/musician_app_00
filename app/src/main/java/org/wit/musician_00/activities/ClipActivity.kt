@@ -21,7 +21,7 @@ import org.wit.musician_00.helpers.showAudioPicker
 import org.wit.musician_00.helpers.showImagePicker
 import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
-import org.wit.musician_00.models.Location
+import org.wit.musician_00.models.UserLocation
 import org.wit.musician_00.models.UserModel
 import timber.log.Timber.i
 import java.time.LocalDate
@@ -40,7 +40,7 @@ class ClipActivity : AppCompatActivity() {
     var clip = ClipModel()
     var user = UserModel()
     lateinit var app : MainApp
-    var location = Location(52.245696, -7.139102, 5f)
+    var location = UserLocation(52.245696, -7.139102, 5f)
     var edit = false
     var userClip = false
 
@@ -156,7 +156,7 @@ class ClipActivity : AppCompatActivity() {
         }
 
         binding.clipLocation.setOnClickListener {
-            val location = Location(52.245696, -7.139102, 15f)
+            val location = UserLocation(52.245696, -7.139102, 15f)
             if (clip.zoom != 0f) {
                 location.lat =  clip.lat
                 location.lng = clip.lng

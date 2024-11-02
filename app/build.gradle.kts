@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.media3.ui)
     implementation("androidx.core:core-splashscreen:1.0.0")
     implementation(libs.gson)
+    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
