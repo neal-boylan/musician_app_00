@@ -22,5 +22,7 @@
     <string name="button_update_profile">Save Changes</string>
     <string name="button_delete_clips">Delete All Clips</string>
     <string name="button_delete_account">Delete Account</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="title_activity_user_maps">Map of All Users</string>
 
 </resources>

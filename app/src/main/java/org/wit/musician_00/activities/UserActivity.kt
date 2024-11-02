@@ -122,9 +122,11 @@ class UserActivity : AppCompatActivity() {
             app.clips.deleteAll(clipsToDelete)
             app.users.delete(user)
             setResult(RESULT_OK)
-            Snackbar.make(it,"Account and clips deleted", Snackbar.LENGTH_LONG).show()
+
             val launcherIntent = Intent(this, LoginActivity::class.java)
             startActivity(launcherIntent)
+
+            Snackbar.make(it,"Account and clips deleted", Snackbar.LENGTH_LONG).show()
             // finish()
         }
 

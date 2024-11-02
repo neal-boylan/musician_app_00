@@ -18,6 +18,7 @@ import org.wit.musician_00.databinding.ActivityClipListBinding
 import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.UserModel
+import org.wit.musician_00.activities.UserMapsActivity
 import timber.log.Timber.i
 import java.util.Locale
 
@@ -85,6 +86,10 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.item_map -> {
+                val launcherIntent = Intent(this, UserMapsActivity::class.java)
+                mapIntentLauncher.launch(launcherIntent)
+            }
             R.id.item_add -> {
                 val launcherIntent = Intent(this, ClipActivity::class.java).putExtra(
                     "user_details",
@@ -131,4 +136,9 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
                 (binding.recyclerView.adapter)?.notifyItemRemoved(pos)
             }
         }
+
+    private val mapIntentLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        )    { }
 }
