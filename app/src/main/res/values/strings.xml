@@ -19,6 +19,8 @@
     <string name="title_activity_map">MapActivity</string>
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
-    <string name="button_update_profile">Update Profile</string>
+    <string name="button_update_profile">Save Changes</string>
+    <string name="button_delete_clips">Delete All Clips</string>
+    <string name="button_delete_account">Delete Account</string>
 
 </resources>

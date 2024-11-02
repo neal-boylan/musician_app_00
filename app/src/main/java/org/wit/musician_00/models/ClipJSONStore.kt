@@ -65,6 +65,11 @@ class ClipJSONStore(private val context: Context) : ClipStore {
         serialize()
     }
 
+    override fun deleteAll(clipList: List<ClipModel>) {
+        clips.removeAll(clipList)
+        serialize()
+    }
+
 
     private fun serialize() {
         val jsonString = gsonBuilder.toJson(clips, listType)

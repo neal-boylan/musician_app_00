@@ -24,7 +24,7 @@ class UserJSONStore(private val context: Context) : UserStore {
     var users = mutableListOf<UserModel>()
 
     init {
-        if (exists(context, JSON_FILE)) {
+        if (exists(context, USER_JSON_FILE)) {
             deserialize()
         }
     }

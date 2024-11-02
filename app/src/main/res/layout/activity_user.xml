@@ -117,11 +117,40 @@
             android:background="@color/colorAccent"
             android:padding="8dp"
             android:stateListAnimator="@null"
-
             android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chooseUserImage"/>
+
+        <Button
+            android:id="@+id/userClipsDelete"
+            android:text="@string/button_delete_clips"
+            android:textAllCaps="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@color/colorAccent"
+            android:padding="8dp"
+            android:stateListAnimator="@null"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userBtnAdd"/>
+
+        <Button
+            android:id="@+id/userBtnDelete"
+            android:text="@string/button_delete_account"
+            android:textAllCaps="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@color/colorAccent"
+            android:padding="8dp"
+            android:stateListAnimator="@null"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userClipsDelete"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

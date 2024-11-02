@@ -74,8 +74,11 @@ class ClipActivity : AppCompatActivity() {
             chipId++
             chip.text = genre
             chip.isCheckable = true
-            if (clip.userId != user.userId || clip.userId != 0L) { chip.isCheckable = false}
-
+            if (intent.hasExtra("clip_edit")) {
+                if (clip.userId != user.userId) {
+                    chip.isCheckable = false
+                }
+            }
             binding.chipGroup.addView(chip)
         }
 

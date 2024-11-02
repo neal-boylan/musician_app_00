@@ -13,6 +13,7 @@ import org.wit.musician_00.R
 import org.wit.musician_00.databinding.ActivityUserBinding
 import org.wit.musician_00.helpers.showImagePicker
 import org.wit.musician_00.main.MainApp
+import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.Location
 import org.wit.musician_00.models.UserModel
 import timber.log.Timber.i
@@ -90,6 +91,41 @@ class UserActivity : AppCompatActivity() {
             else {
                 Snackbar.make(it,"Please Enter a title", Snackbar.LENGTH_LONG).show()
             }
+        }
+
+        binding.userClipsDelete.setOnClickListener() {
+            i("All clips delete clicked")
+            val userClips = app.clips.findAll()
+            var clipsToDelete = mutableListOf<ClipModel>()
+            userClips.forEach { c ->
+                if (c.userId == user.userId) {
+                    clipsToDelete.add(c)
+                }
+            }
+
+            app.clips.deleteAll(clipsToDelete)
+//            setResult(RESULT_OK)
+            Snackbar.make(it,"All clips deleted", Snackbar.LENGTH_LONG).show()
+//            finish()
+
+//            val launcherIntent = Intent(this, LoginActivity::class.java)
+//            startActivity(launcherIntent)
+        }
+
+        binding.userBtnDelete.setOnClickListener() {
+            val clips = app.clips.findAll()
+
+            clips.forEach { c ->
+                if (c.userId == user.userId) {
+                    app.clips.delete(c)
+                }
+            }
+            app.users.delete(user)
+            setResult(RESULT_OK)
+            Snackbar.make(it,"Account and clips deleted", Snackbar.LENGTH_LONG).show()
+            val launcherIntent = Intent(this, LoginActivity::class.java)
+            startActivity(launcherIntent)
+            // finish()
         }
 
         registerImagePickerCallback()

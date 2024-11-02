@@ -5,4 +5,5 @@ interface ClipStore {
     fun create(clip: ClipModel)
     fun update(clip: ClipModel)
     fun delete(clip: ClipModel)
+    fun deleteAll(clipList: List<ClipModel>)
 }

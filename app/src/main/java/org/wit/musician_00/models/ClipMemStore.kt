@@ -45,6 +45,10 @@ class ClipMemStore : ClipStore {
         clips.remove(clip)
     }
 
+    override fun deleteAll(clipList: List<ClipModel>) {
+        clips.removeAll(clipList.toSet())
+    }
+
     private fun logAll() {
         clips.forEach{ i("$it") }
     }
