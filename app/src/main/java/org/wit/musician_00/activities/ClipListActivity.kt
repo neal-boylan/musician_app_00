@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -17,6 +19,7 @@ import org.wit.musician_00.main.MainApp
 import org.wit.musician_00.models.ClipModel
 import org.wit.musician_00.models.UserModel
 import timber.log.Timber.i
+import java.util.Locale
 
 private var pos: Int = 0
 
@@ -25,7 +28,8 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
     var user = UserModel()
     lateinit var app: MainApp
     private lateinit var binding: ActivityClipListBinding
-
+    // private lateinit var searchview: SearchView
+    // private lateinit var adapter: ClipAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,6 +46,38 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = ClipAdapter(app.clips.findAll(), this)
+
+        binding.searchView.clearFocus()
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+                return true
+
+            }
+        })
+
+    }
+
+    private fun filterList(query : String?){
+
+        if (query != null) {
+            val filteredList = ArrayList<ClipModel>()
+            for (i in app.clips.findAll()){
+                if (i.title.lowercase(Locale.ROOT).contains(query)){
+                    filteredList.add(i)
+                }
+            }
+            if (filteredList.isEmpty()){
+                Toast.makeText(this, "No Data found", Toast.LENGTH_SHORT).show()
+            }else{
+                binding.recyclerView.adapter = ClipAdapter(filteredList, this)
+                // adapter.setFilteredList(filteredList)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

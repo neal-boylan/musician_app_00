@@ -15,6 +15,11 @@ class ClipAdapter (private var clips: List<ClipModel>,
                               private val listener: ClipListener ) :
                               RecyclerView.Adapter<ClipAdapter.MainHolder>() {
 
+    fun setFilteredList(clips: List<ClipModel>){
+        this.clips = clips
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         val binding = CardClipBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MainHolder(binding)
