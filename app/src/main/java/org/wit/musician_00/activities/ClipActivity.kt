@@ -182,6 +182,7 @@ class ClipActivity : AppCompatActivity() {
             binding.clipTitle.isEnabled = true
             binding.clipDescription.isEnabled = true
             binding.btnAdd.isVisible = true
+            binding.clipImage.isVisible = false
         }
 
         setSupportActionBar(binding.toolbarAdd)
@@ -255,26 +256,56 @@ class ClipActivity : AppCompatActivity() {
             clip.lng = user.lng
             clip.zoom = user.zoom
 
+//            if (clip.title.isNotEmpty()) {
+//                if (binding.instrumentSpinner.selectedItem.toString() == "Other" && binding.clipInstrument.text.isEmpty()) {
+//                    Snackbar.make(it, "Please specify an Instrument", Snackbar.LENGTH_LONG).show()
+//                } else {
+//                    if (binding.instrumentSpinner.selectedItem.toString() == "Other") {
+//                        i("Other, binding.clipInstrument.text.toString(): ${binding.clipInstrument.text}")
+//                        clip.instrument = binding.clipInstrument.text.toString()
+//                    }
+//                    if (edit) {
+//                        clip.userId = user.userId
+//                        clip.clipEditDate = "Last Edited: ${LocalDate.now()}"
+//                        app.clips.update(clip.copy())
+//                    } else {
+//                        clip.userId = user.userId
+//                        clip.clipDate = "Date Added: ${LocalDate.now()}"
+//                        app.clips.create(clip.copy())
+//                    }
+//                    setResult(RESULT_OK)
+//                    finish()
+//                }
+//            } else {
+//                Snackbar.make(it, "Please Enter a title", Snackbar.LENGTH_LONG).show()
+//            }
+
             if (clip.title.isNotEmpty()) {
-                if (binding.instrumentSpinner.selectedItem.toString() == "Other" && binding.clipInstrument.text.isEmpty()) {
-                    Snackbar.make(it, "Please specify an Instrument", Snackbar.LENGTH_LONG).show()
-                } else {
-                    if (binding.instrumentSpinner.selectedItem.toString() == "Other") {
-                        i("Other, binding.clipInstrument.text.toString(): ${binding.clipInstrument.text}")
+                if (binding.instrumentSpinner.selectedItem.toString() == "Other") {
+                    if (binding.clipInstrument.text.isEmpty()) {
+                        Snackbar.make(it, "Please specify an Instrument", Snackbar.LENGTH_LONG).show()
+                    } else {
                         clip.instrument = binding.clipInstrument.text.toString()
                     }
-                    if (edit) {
-                        clip.userId = user.userId
-                        clip.clipEditDate = "Last Edited: ${LocalDate.now()}"
-                        app.clips.update(clip.copy())
-                    } else {
-                        clip.userId = user.userId
-                        clip.clipDate = "Date Added: ${LocalDate.now()}"
-                        app.clips.create(clip.copy())
-                    }
-                    setResult(RESULT_OK)
-                    finish()
                 }
+
+                if (clip.instrument == "Other"){
+                    i("It's OTHER!")
+                    clip.instrument = binding.clipInstrument.text.toString()
+                }
+                if (edit) {
+                    i("edit clip.instrument: ${clip.instrument}")
+                    clip.userId = user.userId
+                    clip.clipEditDate = "Last Edited: ${LocalDate.now()}"
+                    app.clips.update(clip.copy())
+                } else {
+                    i("new clip.instrument: ${clip.instrument}")
+                    clip.userId = user.userId
+                    clip.clipDate = "Date Added: ${LocalDate.now()}"
+                    app.clips.create(clip.copy())
+                }
+                setResult(RESULT_OK)
+                finish()
             } else {
                 Snackbar.make(it, "Please Enter a title", Snackbar.LENGTH_LONG).show()
             }
@@ -301,6 +332,7 @@ class ClipActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_delete -> {
+                i("delete pressed: $clip")
                 app.clips.delete(clip)
                 setResult(99)
                 finish()

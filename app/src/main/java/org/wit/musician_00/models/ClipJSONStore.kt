@@ -6,6 +6,7 @@ import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import org.wit.musician_00.helpers.*
 import timber.log.Timber
+import timber.log.Timber.i
 import java.lang.reflect.Type
 import java.util.*
 
@@ -61,6 +62,7 @@ class ClipJSONStore(private val context: Context) : ClipStore {
     }
 
     override fun delete(clip: ClipModel) {
+        i("clip delete: $clip")
         clips.remove(clip)
         serialize()
     }

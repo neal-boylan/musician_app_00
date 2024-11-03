@@ -39,12 +39,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         location = intent.extras?.getParcelable<UserLocation>("location")!!
-
+ //       clip = intent.extras?.getParcelable<ClipModel>("clip_edit")!!
 //        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 //        mapFragment.getMapAsync(this)
 
@@ -80,14 +82,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
 
             if(userLocation != null){
                 if(intent.hasExtra("clip_edit")) {
-                    i("Yes clip_edit")
                     location = intent.extras?.getParcelable<UserLocation>("location")!!
                     val tempLocation: Location = userLocation
                     tempLocation.latitude = location.lat
                     tempLocation.longitude = location.lng
                     currentLocation = tempLocation
                 } else {
-                    i("No clip_edit")
                     currentLocation = userLocation
                 }
                 Toast.makeText(applicationContext, currentLocation.latitude.toString() + "" +
@@ -131,12 +131,27 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerD
 //        map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, location.zoom))
 
         val latlng = LatLng(currentLocation.latitude, currentLocation.longitude)
-        val markerOptions= MarkerOptions()
+        var markerOptions = MarkerOptions()
             .position(latlng)
-            .title("Current Location")
+            .title("Location")
             .snippet("GPS : $latlng")
             .draggable(true)
             .position(latlng)
+//        if(intent.hasExtra("clip_edit")){
+//            markerOptions= MarkerOptions()
+//                .position(latlng)
+//                .title(clip.title)
+//                .snippet("GPS : $latlng")
+//                .draggable(true)
+//                .position(latlng)
+//        } else{
+//            markerOptions= MarkerOptions()
+//                .position(latlng)
+//                .title("Current Location")
+//                .snippet("GPS : $latlng")
+//                .draggable(true)
+//                .position(latlng)
+//        }
         map.addMarker(markerOptions)?.showInfoWindow()
         map.uiSettings.isZoomControlsEnabled = true
         map.uiSettings.isZoomGesturesEnabled = true

@@ -22,10 +22,10 @@ import org.wit.musician_00.activities.UserMapsActivity
 import timber.log.Timber.i
 import java.util.Locale
 
-private var pos: Int = 0
+
 
 class ClipListActivity : AppCompatActivity(), ClipListener {
-
+    private var pos: Int = 0
     var user = UserModel()
     lateinit var app: MainApp
     private lateinit var binding: ActivityClipListBinding

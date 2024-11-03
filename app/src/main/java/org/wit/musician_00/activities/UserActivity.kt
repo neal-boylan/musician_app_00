@@ -61,6 +61,7 @@ class UserActivity : AppCompatActivity() {
                 userLocation.zoom = user.userLocation.zoom
                 userLocation = user.userLocation
             }
+            i("userLocation: $userLocation")
             val launcherIntent = Intent(this, MapActivity::class.java).putExtra("location", userLocation)
             mapIntentLauncher.launch(launcherIntent)
         }
