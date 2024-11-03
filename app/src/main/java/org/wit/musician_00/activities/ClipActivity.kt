@@ -7,12 +7,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import com.google.android.material.chip.Chip
+import com.google.android.material.navigation.NavigationBarView.OnItemSelectedListener
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import org.wit.musician_00.R
@@ -36,14 +41,15 @@ class ClipActivity : AppCompatActivity() {
     private lateinit var audioIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mediaPlayer: MediaPlayer
-
-    var clip = ClipModel()
-    var user = UserModel()
     lateinit var app : MainApp
-    var location = UserLocation(52.245696, -7.139102, 5f)
-    var edit = false
-    var userClip = false
 
+    private var clip = ClipModel()
+    private var user = UserModel()
+    private var location = UserLocation(52.245696, -7.139102, 5f)
+    private var edit = false
+    private var userClip = false
+    private val instrumentList = arrayListOf("Guitar", "Bass", "Drums", "Other")
+    private var spinnerPosition: Int = instrumentList.size
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,8 +59,68 @@ class ClipActivity : AppCompatActivity() {
         app = application as MainApp
         i("Clip Activity started..")
         user = intent.extras?.getParcelable("user_details")!!
-        mediaPlayer = MediaPlayer.create(this,R.raw.guitar_melody)
+        mediaPlayer = MediaPlayer.create(this, R.raw.new_recording_7)
+
+        binding.playBtn.isVisible = false
+        binding.stopBtn.isVisible = false
+        binding.pauseBtn.isVisible = false
+
+        if (intent.hasExtra("clip_edit")) {
+            clip = intent.extras?.getParcelable("clip_edit")!!
+            if (clip.audio != Uri.EMPTY) {
+                binding.playBtn.isVisible = true
+                binding.stopBtn.isVisible = true
+                binding.pauseBtn.isVisible = true
+            }
+        }
+
         binding.clipLocation.isVisible = false
+
+
+        // Spinner tutorial: https://www.youtube.com/watch?v=_WCRrD9_ffE&t=527s
+        binding.instrumentSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, instrumentList)
+        binding.instrumentSpinner.onItemSelectedListener = object : OnItemSelectedListener,
+            AdapterView.OnItemSelectedListener {
+            override fun onNavigationItemSelected(item: MenuItem): Boolean {
+                return true
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                i("instrumentList[position]: ${instrumentList[position]}")
+                if (instrumentList[position] == "Other"){
+                    binding.clipInstrument.isVisible = true
+                }else{
+                    binding.clipInstrument.isVisible = false
+                }
+                if (instrumentList.contains(clip.instrument)){
+                    binding.clipInstrument.setText("")
+                }
+                clip.instrument = instrumentList[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
+
+        if (intent.hasExtra("clip_edit")) {
+            clip = intent.extras?.getParcelable("clip_edit")!!
+            binding.clipInstrument.setText(clip.instrument)
+
+            if (clip.userId != user.userId) {
+                binding.instrumentSpinner.isVisible = false
+                binding.clipInstrument.isEnabled = false
+            } else {
+                if (instrumentList.contains(clip.instrument)){
+                    spinnerPosition = instrumentList.indexOf(clip.instrument)
+                }else {
+                    spinnerPosition = instrumentList.size - 1
+                }
+                binding.instrumentSpinner.setSelection(spinnerPosition)
+            }
+        }
+
+
 
         var chipId : Int = 0
         // chip group tutorial https://www.youtube.com/watch?v=lU6YyPQWvgY
@@ -95,13 +161,13 @@ class ClipActivity : AppCompatActivity() {
                 binding.btnAdd.isVisible = true
                 binding.btnAdd.text = getString(R.string.button_saveClip)
             } else {
-                i("clip.user != user")
                 binding.btnAdd.isVisible = false
                 binding.chooseAudio.isVisible = false
                 binding.clipLocation.isVisible = true
                 binding.clipLocation.text = "View Location"
             }
-            binding.toolbarAdd.title = clip.title
+            val clipUser:UserModel? = app.users.findByUserId(clip.userId)
+            binding.toolbarAdd.title = "${clip.title} by ${clipUser?.email}"
             Picasso.get().load(clip.image).into(binding.clipImage)
             if (clip.audio != Uri.EMPTY) {
                 binding.chooseAudio.text = "Change Audio"
@@ -120,7 +186,16 @@ class ClipActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbarAdd)
 
-        val checkedGenres = arrayListOf<String>()
+        val checkedGenres: ArrayList<String>
+        if (intent.hasExtra("clip_edit")) {
+            if (clip.userId == user.userId) {
+                checkedGenres = clip.genres
+            } else {
+                checkedGenres = arrayListOf<String>()
+            }
+        } else {
+            checkedGenres = arrayListOf<String>()
+        }
 
         binding.chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
             if (checkedIds.isEmpty()){
@@ -134,6 +209,7 @@ class ClipActivity : AppCompatActivity() {
                 }
             }
         }
+
 
         binding.chooseAudio.setOnClickListener {
             showAudioPicker(audioIntentLauncher)
@@ -180,20 +256,27 @@ class ClipActivity : AppCompatActivity() {
             clip.zoom = user.zoom
 
             if (clip.title.isNotEmpty()) {
-                if (edit) {
-                    clip.userId = user.userId
-                    clip.clipEditDate = "Last Edited: ${LocalDate.now()}"
-                    app.clips.update(clip.copy())
+                if (binding.instrumentSpinner.selectedItem.toString() == "Other" && binding.clipInstrument.text.isEmpty()) {
+                    Snackbar.make(it, "Please specify an Instrument", Snackbar.LENGTH_LONG).show()
                 } else {
-                    clip.userId = user.userId
-                    clip.clipDate = "Date Added: ${LocalDate.now()}"
-                    app.clips.create(clip.copy())
+                    if (binding.instrumentSpinner.selectedItem.toString() == "Other") {
+                        i("Other, binding.clipInstrument.text.toString(): ${binding.clipInstrument.text}")
+                        clip.instrument = binding.clipInstrument.text.toString()
+                    }
+                    if (edit) {
+                        clip.userId = user.userId
+                        clip.clipEditDate = "Last Edited: ${LocalDate.now()}"
+                        app.clips.update(clip.copy())
+                    } else {
+                        clip.userId = user.userId
+                        clip.clipDate = "Date Added: ${LocalDate.now()}"
+                        app.clips.create(clip.copy())
+                    }
+                    setResult(RESULT_OK)
+                    finish()
                 }
-                setResult(RESULT_OK)
-                finish()
-            }
-            else {
-                Snackbar.make(it,"Please Enter a title", Snackbar.LENGTH_LONG).show()
+            } else {
+                Snackbar.make(it, "Please Enter a title", Snackbar.LENGTH_LONG).show()
             }
         }
 
@@ -238,6 +321,9 @@ class ClipActivity : AppCompatActivity() {
                             i("Got Result $result")
                             clip.audio = result.data!!.data!!
                             binding.chooseAudio.setText(R.string.button_changeAudio)
+                            binding.playBtn.isVisible = true
+                            binding.stopBtn.isVisible = true
+                            binding.pauseBtn.isVisible = true
                         }
                     }
                     RESULT_CANCELED -> { }

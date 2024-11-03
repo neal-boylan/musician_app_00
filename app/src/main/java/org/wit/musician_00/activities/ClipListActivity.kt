@@ -33,15 +33,13 @@ class ClipListActivity : AppCompatActivity(), ClipListener {
     // private lateinit var adapter: ClipAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        user = intent.extras?.getParcelable("user_details")!!
         binding = ActivityClipListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.toolbar.title = title
+        binding.toolbar.title = "Welcome, ${user.email}"
         setSupportActionBar(binding.toolbar)
 
         app = application as MainApp
-
-        user = intent.extras?.getParcelable("user_details")!!
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager

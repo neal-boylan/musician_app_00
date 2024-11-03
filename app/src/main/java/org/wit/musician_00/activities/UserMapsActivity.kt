@@ -11,6 +11,8 @@ import com.squareup.picasso.Picasso
 import org.wit.musician_00.databinding.ActivityUserMapsBinding
 import org.wit.musician_00.databinding.ContentUserMapsBinding
 import org.wit.musician_00.main.MainApp
+import org.wit.musician_00.models.ClipModel
+import timber.log.Timber.i
 
 class UserMapsActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
 
@@ -76,8 +78,16 @@ class UserMapsActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
     override fun onMarkerClick(marker: Marker): Boolean {
         val tag = marker.tag as Long
         val user = app.users.findByUserId(tag)
+        var clipCount = 0
         contentBinding.currentTitle.text = user!!.email
-        // contentBinding.currentDescription.text = user.description
+        val userClips = app.clips.findAll()
+
+        userClips.forEach { c ->
+            if (c.userId == user.userId) {
+                clipCount++
+            }
+        }
+        contentBinding.currentDescription.text = "Clips: " + clipCount.toString()
         Picasso.get().load(user.userImage).into(contentBinding.currentImage)
         return false
     }

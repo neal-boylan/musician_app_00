@@ -4,7 +4,7 @@
     <string name="button_saveClip">Save Clip</string>
     <string name="hint_clipTitle">Clip Title</string>
     <string name="hint_clipDescription">Clip Description</string>
-    <string name="hint_clipInstrument">Clip Instrument</string>
+    <string name="hint_clipInstrument">If \'Other\', please specify</string>
     <string name="hint_clipGenres">Clip Genres</string>
     <string name="menu_addClip">Add</string>
     <string name="menu_delete">Delete</string>
